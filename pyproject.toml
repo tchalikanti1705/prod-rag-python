@@ -3,15 +3,14 @@ name = "ragproductionapp"
 version = "1.0.0"
 description = "Production-ready RAG application with FastAPI backend and React frontend"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.116.1",
-    "inngest>=0.5.6",
     "llama-index-core>=0.14.0",
     "llama-index-readers-file>=0.5.4",
-    "openai>=1.107.0",
-    "python-dotenv>=1.1.1",
+    "openai>=1.50.0",
+    "python-dotenv>=1.0.0",
     "python-multipart>=0.0.9",
-    "qdrant-client>=1.15.1",
-    "uvicorn>=0.35.0",
+    "qdrant-client>=1.15.0",
+    "uvicorn>=0.30.0",
 ]
