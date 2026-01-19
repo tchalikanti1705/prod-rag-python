@@ -6,3 +6,4 @@
 
 export { useChat } from './useChat';
 export { useFileUpload } from './useFileUpload';
+export { useSpeechRecognition } from './useSpeechRecognition';
