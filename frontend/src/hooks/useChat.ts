@@ -75,8 +75,14 @@ export function useChat(): UseChatReturn {
       setMessages((prev) => [...prev, assistantMessage]);
       setLoadingState('success');
     } catch (err) {
-      const errorMessage =
+      let errorMessage =
         err instanceof Error ? err.message : 'Failed to get response';
+      
+      // Provide helpful message for common errors
+      if (errorMessage.includes('500') || errorMessage.includes('Internal Server Error')) {
+        errorMessage = 'Please upload a PDF document first before asking questions.';
+      }
+      
       setError(errorMessage);
       setLoadingState('error');
 
@@ -84,7 +90,7 @@ export function useChat(): UseChatReturn {
       const errorAssistantMessage: ChatMessage = {
         id: generateId(),
         role: 'assistant',
-        content: `Error: ${errorMessage}`,
+        content: errorMessage,
         timestamp: new Date(),
       };
 
