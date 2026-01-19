@@ -36,8 +36,17 @@ CHUNK_OVERLAP = 200  # Overlap between consecutive chunks for context continuity
 # Module-level Instances
 # =============================================================================
 
-# Initialize OpenAI client (uses OPENAI_API_KEY from environment)
-_openai_client = OpenAI()
+# OpenAI client - initialized lazily to avoid import-time errors
+_openai_client = None
+
+
+def _get_openai_client():
+    """Get or create the OpenAI client (lazy initialization)."""
+    global _openai_client
+    if _openai_client is None:
+        _openai_client = OpenAI()
+    return _openai_client
+
 
 # Initialize text splitter with semantic sentence boundaries
 _text_splitter = SentenceSplitter(
@@ -109,7 +118,8 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
         >>> len(embeddings[0])
         3072
     """
-    response = _openai_client.embeddings.create(
+    client = _get_openai_client()
+    response = client.embeddings.create(
         model=EMBED_MODEL,
         input=texts,
     )
