@@ -1,0 +1,15 @@
+[build]
+# Install Node.js for frontend build
+NIXPACKS_PKGS=["nodejs_22", "npm"]
+
+[phases.setup]
+nixPkgs = ["nodejs_22", "npm", "python312"]
+
+[phases.install]
+cmds = [
+    "pip install -r requirements.txt",
+    "cd frontend && npm ci && npm run build"
+]
+
+[start]
+cmd = "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"

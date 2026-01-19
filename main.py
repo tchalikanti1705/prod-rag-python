@@ -20,6 +20,8 @@ from typing import Optional
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from openai import OpenAI
 from pydantic import BaseModel
 
@@ -281,3 +283,35 @@ async def list_documents():
     """
     files = [f.name for f in UPLOADS_DIR.glob("*.pdf")]
     return {"documents": files, "count": len(files)}
+
+
+# =============================================================================
+# Static Files - Serve React Frontend
+# =============================================================================
+
+# Path to the built React frontend
+FRONTEND_DIR = Path(__file__).parent / "frontend" / "dist"
+
+# Serve static assets (JS, CSS, images)
+if FRONTEND_DIR.exists():
+    app.mount("/assets", StaticFiles(directory=FRONTEND_DIR / "assets"), name="assets")
+
+
+@app.get("/{full_path:path}")
+async def serve_frontend(full_path: str):
+    """
+    Serve the React frontend for all non-API routes.
+    This enables client-side routing.
+    """
+    # If the path points to a file in dist, serve it
+    file_path = FRONTEND_DIR / full_path
+    if file_path.exists() and file_path.is_file():
+        return FileResponse(file_path)
+    
+    # Otherwise serve index.html for client-side routing
+    index_path = FRONTEND_DIR / "index.html"
+    if index_path.exists():
+        return FileResponse(index_path)
+    
+    # Fallback if frontend not built
+    return {"message": "Frontend not built. Run 'npm run build' in frontend directory."}
