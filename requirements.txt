@@ -1,0 +1,20 @@
+# RAG Document Assistant - Python Dependencies
+# Install: pip install -r requirements.txt
+
+# Web Framework
+fastapi>=0.116.0
+uvicorn>=0.35.0
+
+# PDF Processing
+llama-index-core>=0.14.0
+llama-index-readers-file>=0.5.4
+
+# Vector Database
+qdrant-client>=1.15.0
+
+# OpenAI API
+openai>=1.50.0
+
+# Utilities
+python-dotenv>=1.0.0
+python-multipart>=0.0.9
